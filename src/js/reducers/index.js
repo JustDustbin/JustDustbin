@@ -5,7 +5,7 @@ import { combineReducers } from 'redux';
 //import connwizardstate from './connwizardstate';
 //import reconnstate from './reconnstate';
 //import auth0state from './auth0state';
-//import routesstate from './routesstate';
+import routesState from './routes_state';
 //import appsstate from './appsstate';
 //import maintabsstate from './maintabsstate';
 
@@ -22,7 +22,7 @@ const CombinedReducer = combineReducers({
 */
 
 const CombinedReducer = combineReducers({
-  //
+  routesState
 })
 
 export default CombinedReducer;

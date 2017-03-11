@@ -25,9 +25,9 @@ const scenes = Actions.create(
     <Scene key="firstRun" initial={is_never_loggedin()}>
       <Scene key="firstScreen" component={FirstScreen} initial={true} hideNavBar={true} />
     </Scene>
-    <Scene key="mainScreen" initial={!is_never_loggedin()} component={MainApp} hideNavBar={true} type="reset"/>
-    <Scene key="registerScreen" component={RegisterApp} hideNavBar={true}/>
-    <Scene key="manageScreen" component={manageApp} hideNavBar={true}/>
+    <Scene key="mainScreen" initial={!is_never_loggedin()} component={MainScreen} hideNavBar={true} type="reset"/>
+    <Scene key="registerScreen" component={RegisterScreen} hideNavBar={true}/>
+    <Scene key="manageScreen" component={ManageScreen} hideNavBar={true}/>
   </Scene>
   </Scene>
 );
