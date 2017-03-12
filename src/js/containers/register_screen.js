@@ -25,13 +25,24 @@ class RegisterScreenComponent extends Component {
   }
 
   componentDidMount() {
+    this.is_mounted = true;
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        this.setState({latitude: position.latitude, longitude: position.longitude});
+        if(this.is_mounted) {
+          this.setState({latitude: position.latitude, longitude: position.longitude});
+        }
       },
-      (error) => alert("Can't Locate. Try Later."),
+      (error) => {
+        if(this.is_mounted) {
+          alert("Can't Locate. Try Later.");
+        }
+      },
       {enableHighAccuracy: true, timeout: 200000000, maximumAge: 1000}
     );
+  }
+
+  componentWillUnmount() {
+    this.is_mounted = false;
   }
 
   render() {

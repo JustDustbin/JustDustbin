@@ -5,7 +5,6 @@ import { Scene, Actions } from 'react-native-router-flux'
 import FirstScreen from './containers/first_screen';
 import MainScreen from './containers/main_screen';
 import RegisterScreen from './containers/register_screen';
-import ManageScreen from './containers/manage_screen';
 import realm from './realm';
 
 function is_never_loggedin() {

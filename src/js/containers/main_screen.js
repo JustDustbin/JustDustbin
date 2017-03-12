@@ -26,25 +26,29 @@ class MainScreenComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        mapRegion: {
+      mapRegion: {
         latitude: 12.904316,
         longitude: 77.515391,
         latitudeDelta: 1.1033,
-        longitudeDelta: 1.0532,
+        longitudeDelta: 1.0532
       }
     };
+  }
+
+  updateMapRegionByGeo(position) {
+    this.setState({mapRegion: {latitude: position.coords.latitude, longitude: position.coords.longitude, latitudeDelta: 0.0533, longitudeDelta: 0.0232}});
   }
 
   componentDidMount() {
     this.timerForfetch = setInterval(()=>{this.props.loadItems();}, 3000);
     this.props.loadItems(); //put in timer
-    //navigator.geolocation.getCurrentPosition(
-    //  (position) => {
-    //    this.setState({mapRegion: {latitude: position.latitude, longitude: position.longitude, latitudeDelta: this.state.latitudeDelta, longitudeDelta: this.state.longitudeDelta}});
-    //  },
-    //  (error) => alert(JSON.stringify(error)),
-    //  {enableHighAccuracy: true, timeout: 200000000, maximumAge: 1000}
-    //);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.updateMapRegionByGeo(position);
+      },
+      (error) => alert(JSON.stringify(error)),
+      {enableHighAccuracy: true, timeout: 200000000, maximumAge: 1000}
+    );
   }
 
   componentWillUnmount() {
@@ -61,7 +65,7 @@ class MainScreenComponent extends Component {
       <View style={styles.container}>
         <StatusBar translucent={true} backgroundColor="#00000020" />
         <MapView
-          initialRegion={this.state.mapRegion}
+          onRegionChange={(region)=>{this.setState({ mapRegion: region });}}
           region={this.state.mapRegion}
           style={{height:300}}
         >
@@ -79,7 +83,7 @@ class MainScreenComponent extends Component {
             <ScrollView>
               <View style={styles.flexcardcontainer}>
                 {this.props.items.map((tile) => (
-                    <TouchableNativeFeedback key={tile.id} onPress={() => {this.setState({mapRegion: {latitude:parseFloat(tile.gps_latitude), longitude:parseFloat(tile.gps_longitude), latitudeDelta:0.001, longitudeDelta:0.001}})}} background={TouchableNativeFeedback.SelectableBackground()}>
+                    <TouchableNativeFeedback key={tile.id} onPress={() => {this.setState({mapRegion: {latitude:parseFloat(tile.gps_latitude), longitude:parseFloat(tile.gps_longitude), latitudeDelta:0.005, longitudeDelta:0.005}})}} background={TouchableNativeFeedback.SelectableBackground()}>
                       <View style={styles.flexcard}>
                         <Text style={styles.flexcardtextpri}>{tile.name}</Text>
                         <Text style={styles.flexcardtextsec}>{tile.city}</Text>
