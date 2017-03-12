@@ -12,7 +12,6 @@ const ConnectedRouter = connect()(Router);
 const getSceneStyle = (/* NavigationSceneRendererProps  props, computedProps */) => {
   const style = {
     flex: 1,
-    backgroundColor: '#333330',
     shadowColor: null,
     shadowOffset: null,
     shadowOpacity: null,
@@ -30,11 +29,11 @@ export default class Root extends Component {
     );
   }
   componentDidMount() {
-    if(Platform.OS === 'ios') {
-      StatusBar.setBarStyle('light-content', true);
-    }
-    else if(Platform.OS === 'android') {
-      StatusBar.setBackgroundColor('#333330');
-    }
+    //if(Platform.OS === 'ios') {
+    //  StatusBar.setBarStyle('light-content', true);
+    //}
+    //else if(Platform.OS === 'android') {
+    //  StatusBar.setBackgroundColor('#333330');
+    //}
   }
 }

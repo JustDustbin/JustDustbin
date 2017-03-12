@@ -29,4 +29,12 @@ if(realm.objectForPrimaryKey('ConfigData', 'profile_name') === undefined) {
   });
 }
 
+if(realm.objectForPrimaryKey('ConfigData', 'profile_number') === undefined) {
+  realm.write(() => {
+    realm.create('ConfigData', {
+      key: 'profile_number', value: ''
+    });
+  });
+}
+
 export default realm;

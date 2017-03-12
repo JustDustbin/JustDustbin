@@ -4,7 +4,11 @@
     android:versionName="1.0">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
 
     <uses-sdk
         android:minSdkVersion="16"
@@ -16,6 +20,9 @@
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
       android:theme="@style/AppTheme">
+     <meta-data
+       android:name="com.google.android.geo.API_KEY"
+       android:value="AIzaSyC10b4SAAed8kFkxsDkW4AUTKfl5nKUx54"/>
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"

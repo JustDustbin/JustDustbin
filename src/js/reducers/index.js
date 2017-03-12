@@ -1,28 +1,16 @@
 'use strict';
 
 import { combineReducers } from 'redux';
-//import connstate from './connstate';
-//import connwizardstate from './connwizardstate';
-//import reconnstate from './reconnstate';
-//import auth0state from './auth0state';
 import routesState from './routes_state';
-//import appsstate from './appsstate';
-//import maintabsstate from './maintabsstate';
-
-/*
-const CombinedReducer = combineReducers({
-  connstate,
-  connwizardstate,
-  reconnstate,
-  routesstate,
-  auth0state,
-  appsstate,
-  maintabsstate
-})
-*/
+import workerState from './worker_state';
+import mainScreenState from './main_screen_state';
+import registerScreenState from './register_screen_state';
 
 const CombinedReducer = combineReducers({
-  routesState
+  routesState,
+  workerState,
+  mainScreenState,
+  registerScreenState
 })
 
 export default CombinedReducer;

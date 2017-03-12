@@ -27,7 +27,6 @@ const scenes = Actions.create(
     </Scene>
     <Scene key="mainScreen" initial={!is_never_loggedin()} component={MainScreen} hideNavBar={true} type="reset"/>
     <Scene key="registerScreen" component={RegisterScreen} hideNavBar={true}/>
-    <Scene key="manageScreen" component={ManageScreen} hideNavBar={true}/>
   </Scene>
   </Scene>
 );

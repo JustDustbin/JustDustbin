@@ -1,9 +1,12 @@
 'use strict';
 
-import { createStore } from 'redux';
+import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import reducer from '../reducers';
-import devToolsEnhancer from 'remote-redux-devtools';
+import thunk from 'redux-thunk';
+//import devToolsEnhancer from 'remote-redux-devtools';
+import { composeWithDevTools } from 'remote-redux-devtools';
+const enhancer = composeWithDevTools(applyMiddleware(thunk));
 
 export default function configureStore() {
-  return createStore(reducer, devToolsEnhancer());
+  return createStore(reducer, enhancer);
 }
