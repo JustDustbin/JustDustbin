@@ -8,7 +8,6 @@ import {
   ScrollView,
   ProgressBarAndroid,
   Platform,
-  ProgressViewIOS,
   TouchableNativeFeedback,
   TouchableOpacity,
   StatusBar
@@ -55,11 +54,6 @@ class MainScreenComponent extends Component {
     clearInterval(this.timerForfetch);
   }
 
-  getProgress(offset) {
-    var progress = this.state.progress + offset;
-    return Math.sin(progress % Math.PI) % 1;
-  }
-
   render() {
     return (
       <View style={styles.container}>
@@ -97,13 +91,13 @@ class MainScreenComponent extends Component {
             </ScrollView>
           }
           {this.props.status === 'loading' && this.props.items.length === 0 &&
-            <View>
-              <Text>loading...</Text>
+            <View style={styles.msgcont}>
+              <Text style={styles.msgconttext}>loading...</Text>
             </View>
           }
           {this.props.status === 'error' && this.props.items.length === 0 &&
-            <View>
-              <Text>try again</Text>
+            <View style={styles.msgcont}>
+              <Text style={styles.msgconttext}>try again</Text>
             </View>
           }
         
@@ -118,6 +112,16 @@ class MainScreenComponent extends Component {
 }
 
 const styles = StyleSheet.create({
+  msgcont: {
+    flex: 1,
+    padding: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  msgconttext: {
+    fontWeight: '600',
+    fontSize: 30
+  },
   container: {
     flex: 1,
     justifyContent: 'flex-start',

@@ -17,9 +17,9 @@ let realm = new Realm({
   schemaVersion: 1
 });
 
-realm.write(() => {
-  realm.deleteAll();
-});
+//realm.write(() => {
+//  realm.deleteAll();
+//});
 
 if(realm.objectForPrimaryKey('ConfigData', 'profile_name') === undefined) {
   realm.write(() => {
