@@ -7,7 +7,8 @@ import {
   View,
   Button,
   TouchableNativeFeedback,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { connect } from 'react-redux';
@@ -81,9 +82,7 @@ class RegisterScreenComponent extends Component {
                 <Text>Scan the QR code on  the bin</Text>
               </View>
             }
-            bottomContent={
-              ()=>{return this.renderBottomContent();}
-            }
+            bottomContent={this.renderBottomContent()}
           />
         }
         {this.state.latitude===null && this.state.longitude===null &&
