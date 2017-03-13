@@ -71,7 +71,9 @@ export const callRegisterScreenError = () => ({
   type: types.REGISTER_SCREEN_ERROR
 })
 
-export function callRegisterScreenItemAdd(product_id, lat, lng) { /*missing const and es6 syntax*/
+export function callRegisterScreenItemAdd(product_id, lat, lng) {
+  console.log(lat);
+  console.log(lng); /*missing const and es6 syntax*/
   return function (dispatch, getState) {
     let worker_name = realm.objectForPrimaryKey('ConfigData', 'profile_name').value;
     let worker_number = realm.objectForPrimaryKey('ConfigData', 'profile_number').value;

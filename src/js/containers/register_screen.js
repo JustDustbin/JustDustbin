@@ -6,7 +6,8 @@ import {
   Text,
   View,
   Button,
-  TouchableNativeFeedback
+  TouchableNativeFeedback,
+  TouchableOpacity
 } from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { connect } from 'react-redux';
@@ -29,7 +30,7 @@ class RegisterScreenComponent extends Component {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         if(this.is_mounted) {
-          this.setState({latitude: position.latitude, longitude: position.longitude});
+          this.setState({latitude: position.coords.latitude, longitude: position.coords.longitude});
         }
       },
       (error) => {
@@ -45,12 +46,34 @@ class RegisterScreenComponent extends Component {
     this.is_mounted = false;
   }
 
+  renderBottomContent() {
+    if(Platform.OS === 'android') {
+      return (
+        <TouchableNativeFeedback
+          onPress={()=>{Actions.mainScreen()}}
+          background={TouchableNativeFeedback.SelectableBackground()}
+        >
+          <Icon name={this.props.status === 'success' ? 'check' : 'backburger' } size={30} color='green' />
+        </TouchableNativeFeedback>
+      );
+    }
+    else if(Platform.OS === 'ios') {
+      return (
+        <TouchableOpacity
+          onPress={()=>{Actions.mainScreen()}}
+        >
+          <Icon name={this.props.status === 'success' ? 'check' : 'backburger' } size={30} color='green' />
+        </TouchableOpacity>
+      );
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
         {this.state.latitude!==null && this.state.longitude!==null &&
           <QRCodeScanner
-            onRead={(e)=>{this.props.registerScreenItemAdd(e.data, this.state.latitude, this.state.longitude)}}
+            onRead={(e)=>{console.log(this.state.longitude);console.log(this.state.latitude);this.props.registerScreenItemAdd(e.data, this.state.latitude, this.state.longitude);}}
             style={styles.qrscanner}
             topContent={
               <View style={styles.topbottomContainer}>
@@ -59,12 +82,7 @@ class RegisterScreenComponent extends Component {
               </View>
             }
             bottomContent={
-              <TouchableNativeFeedback
-                onPress={()=>{Actions.mainScreen()}}
-                background={TouchableNativeFeedback.SelectableBackground()}
-              >
-                <Icon name={this.props.status === 'success' ? 'check' : 'backburger' } size={30} color='green' />
-              </TouchableNativeFeedback>
+              ()=>{return this.renderBottomContent();}
             }
           />
         }

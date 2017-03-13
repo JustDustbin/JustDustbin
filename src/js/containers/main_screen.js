@@ -7,6 +7,7 @@ import {
   View,
   ScrollView,
   ProgressBarAndroid,
+  ProgressViewIOS,
   Platform,
   TouchableNativeFeedback,
   TouchableOpacity,
@@ -19,6 +20,7 @@ import { Actions } from 'react-native-router-flux';
 import { callMainScreenItemsLoad } from '../actions';
 import timeSince from '../helpers/time_since';
 import ActionButton from 'react-native-action-button';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class MainScreenComponent extends Component {
 
@@ -30,12 +32,14 @@ class MainScreenComponent extends Component {
         longitude: 77.515391,
         latitudeDelta: 1.1033,
         longitudeDelta: 1.0532
-      }
+      },
+      self_latitude: null,
+      self_longitude: null
     };
   }
 
   updateMapRegionByGeo(position) {
-    this.setState({mapRegion: {latitude: position.coords.latitude, longitude: position.coords.longitude, latitudeDelta: 0.0533, longitudeDelta: 0.0232}});
+    this.setState({self_latitude: position.coords.latitude, self_longitude: position.coords.longitude, mapRegion: {latitude: position.coords.latitude, longitude: position.coords.longitude, latitudeDelta: 0.0533, longitudeDelta: 0.0232}});
   }
 
   componentDidMount() {
@@ -45,13 +49,47 @@ class MainScreenComponent extends Component {
       (position) => {
         this.updateMapRegionByGeo(position);
       },
-      (error) => alert(JSON.stringify(error)),
+      (error) => alert("Can't locate you. Try later."),
       {enableHighAccuracy: true, timeout: 200000000, maximumAge: 1000}
     );
   }
 
   componentWillUnmount() {
     clearInterval(this.timerForfetch);
+  }
+
+  getProgress(offset) {
+    var progress = this.state.progress + offset;
+    return Math.sin(progress % Math.PI) % 1;
+  }
+
+  renderCard(tile) {
+  if(Platform.OS === 'android') {
+    return (
+      <TouchableNativeFeedback key={tile.id} onPress={() => {this.setState({mapRegion: {latitude:parseFloat(tile.gps_latitude), longitude:parseFloat(tile.gps_longitude), latitudeDelta:0.005, longitudeDelta:0.005}})}} background={TouchableNativeFeedback.SelectableBackground()}>
+        <View style={styles.flexcard}>
+          <Text style={styles.flexcardtextpri}>{tile.name}</Text>
+          <Text style={styles.flexcardtextsec}>{tile.city}</Text>
+          <Text style={styles.flexcardtextpri}>{(100-tile.status)+"% of capacity"}</Text>
+          <ProgressBarAndroid styleAttr="Horizontal" indeterminate={false} progress={(100-tile.status)/100} />
+          <Text>{timeSince(Date.parse(tile.updated_at))+" ago"}</Text>
+        </View>
+      </TouchableNativeFeedback>
+    );
+  }
+  else if(Platform.OS === 'ios') {
+    return (
+      <TouchableOpacity key={tile.id} onPress={() => {this.setState({mapRegion: {latitude:parseFloat(tile.gps_latitude), longitude:parseFloat(tile.gps_longitude), latitudeDelta:0.005, longitudeDelta:0.005}})}}>
+        <View style={styles.flexcard}>
+          <Text style={styles.flexcardtextpri}>{tile.name}</Text>
+          <Text style={styles.flexcardtextsec}>{tile.city}</Text>
+          <Text style={styles.flexcardtextpri}>{(100-tile.status)+"% of capacity"}</Text>
+          <ProgressViewIOS progressTintColor="teal" progress={this.getProgress((100-tile.status)/100)}/>
+          <Text>{timeSince(Date.parse(tile.updated_at))+" ago"}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  }
   }
 
   render() {
@@ -71,22 +109,19 @@ class MainScreenComponent extends Component {
               description={(100-item.status)+"%"}
             />
           ))}
+          {this.state.self_latitude !== null && this.state.self_longitude !== null &&
+            <MapView.Marker key="self" coordinate={{latitude: this.state.self_latitude, longitude: this.state.self_longitude}}>
+              <Icon name="account-location" size={30} color="blue" />
+            </MapView.Marker>
+          }
         </MapView>
         <SubHeader text="Dustbins" color="rgba(0 ,0 ,0 , 0.54)" />
           {this.props.items.length !== 0 &&
             <ScrollView>
               <View style={styles.flexcardcontainer}>
-                {this.props.items.map((tile) => (
-                    <TouchableNativeFeedback key={tile.id} onPress={() => {this.setState({mapRegion: {latitude:parseFloat(tile.gps_latitude), longitude:parseFloat(tile.gps_longitude), latitudeDelta:0.005, longitudeDelta:0.005}})}} background={TouchableNativeFeedback.SelectableBackground()}>
-                      <View style={styles.flexcard}>
-                        <Text style={styles.flexcardtextpri}>{tile.name}</Text>
-                        <Text style={styles.flexcardtextsec}>{tile.city}</Text>
-                        <Text style={styles.flexcardtextpri}>{(100-tile.status)+"% of capacity"}</Text>
-                        <ProgressBarAndroid styleAttr="Horizontal" indeterminate={false} progress={(100-tile.status)/100} />
-                        <Text>{timeSince(Date.parse(tile.updated_at))+" ago"}</Text>
-                      </View>
-                    </TouchableNativeFeedback>
-                ))}
+                {this.props.items.map((tile) => {
+                  return this.renderCard(tile);
+                })}
               </View>
             </ScrollView>
           }
@@ -132,15 +167,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
-    paddingLeft: 15,
-    paddingRight: 15
+    paddingLeft: 10,
+    paddingRight: 10
   },
   flexcard: {
-    width: 165,
-    height: 165,
+    width: 160,
+    height: 160,
     borderWidth: 3,
     borderColor: '#FFFFFF00',
     padding: 5,
+    margin: 5,
     elevation: 2
   },
   flexcardtextpri: {
